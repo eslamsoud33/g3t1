@@ -1,6 +1,0 @@
-{
-  "name": "موسوعة الكنز التعليمي",
-  "description": "تطبيق ويب تفاعلي لمادة الدراسات الاجتماعية للصف الثالث الإعدادي - مراجعة ليلة الامتحان واختبر قدراتك بأسلوب تفاعلي مميز وعصري",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
