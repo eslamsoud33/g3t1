@@ -2,7 +2,7 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
 // Minimal installable Service Worker for Kanz Educational Platform
-const CACHE_NAME = 'kanz-cache-v3'; // تم تغيير الرقم إلى 3 لتحديث كاش الأيقونات للطلاب
+const CACHE_NAME = 'kanz-cache-v4'; // تم تغيير الرقم إلى 4 لحل مشاكل الصوت
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -23,10 +23,16 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // تجاهل طلبات الاستكمال (Range) الخاصة بالصوتيات لتجنب أخطاء سفاري وكروم على الموبايل
+  if (event.request.headers.has('range')) {
+    return;
+  }
+
   const url = new URL(event.request.url);
   
-  // Skip audio proxy or range request files to let browser handle native streaming (Range 206)
-  if (url.pathname.includes('/api/proxy-audio') || event.request.destination === 'audio' || event.request.destination === 'video') {
+  // تجاهل أي روابط خارجية (مثل روابط الصوت من archive.org) 
+  // لكي يتعامل معها مشغل الموبايل الأصلي بشكل طبيعي ويدعم استكمال التحميل (Range Requests)
+  if (url.origin !== self.location.origin || url.pathname.includes('/api/proxy-audio') || event.request.destination === 'audio' || event.request.destination === 'video' || url.pathname.match(/\.(mp3|mp4|wav|m4a|ogg|aac)$/i)) {
     return;
   }
   
